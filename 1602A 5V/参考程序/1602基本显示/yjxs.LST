@@ -1,0 +1,111 @@
+C51 COMPILER V7.06   YJXS                                                                  07/20/2014 13:42:23 PAGE 1   
+
+
+C51 COMPILER V7.06, COMPILATION OF MODULE YJXS
+OBJECT MODULE PLACED IN yjxs.OBJ
+COMPILER INVOKED BY: D:\Program Files (x86)\Keil\C51\BIN\C51.EXE yjxs.c BROWSE DEBUG OBJECTEXTEND
+
+stmt level    source
+
+   1          #include<reg52.h>
+   2          #include<intrins.h>
+   3          #define uchar unsigned char
+   4          #define uint unsigned int
+   5          sbit wxLE=P2^6;
+   6          sbit dxLE=P2^7;
+   7          sbit RS=P1^3;
+   8          sbit RW=P1^4;
+   9          sbit EN=P1^5;
+  10          uint i;
+  11          uchar code table[]="I LOVE YOU !";
+  12          uchar code table1[]="1314520 ! ^_^";
+  13          void delay(uint z)
+  14          {
+  15   1              uint x,y;
+  16   1              for(x=z;x>0;x--)
+  17   1                      for(y=114;y>0;y--);
+  18   1      }
+  19          bit LCD_Check_Busy()
+  20          {
+  21   1              P0=0xff;
+  22   1              RS=0;
+  23   1              RW=1;
+  24   1              EN=0;
+  25   1              _nop_();
+  26   1              EN=1;
+  27   1              return (bit)(P0&0x80);
+  28   1      }
+  29          void LCD_Write_Com(uchar com)
+  30          {
+  31   1              while(LCD_Check_Busy());
+  32   1              RS=0;
+  33   1              RW=0;
+  34   1              EN=1;
+  35   1              P0=com;
+  36   1              _nop_();
+  37   1              EN=0;
+  38   1      }
+  39          void LCD_Write_Data(uchar Data)
+  40          {
+  41   1              while(LCD_Check_Busy());
+  42   1              RS=1;
+  43   1              RW=0;
+  44   1              EN=1;
+  45   1              P0=Data;
+  46   1              _nop_();
+  47   1              EN=0;
+  48   1      }
+  49          void main()
+  50          {
+  51   1              wxLE=1;
+  52   1              P0=0;
+  53   1              wxLE=0;
+  54   1              dxLE=1;
+  55   1              P0=0;
+C51 COMPILER V7.06   YJXS                                                                  07/20/2014 13:42:23 PAGE 2   
+
+  56   1              dxLE=0;
+  57   1              LCD_Write_Com(0x38);//显示模式设置
+  58   1              LCD_Write_Com(0x01);//清屏，地址计数器清零，光标复位，显示缓冲区DDRAM的内容全部写入空格
+  59   1              LCD_Write_Com(0x0c);//显示开启，不显示光标，光标不闪烁
+  60   1              LCD_Write_Com(0x06);//读写一个字符过后，地址指针加1，光标加1
+  61   1      
+  62   1      
+  63   1              while(1)
+  64   1              {
+  65   2                      LCD_Write_Com(0x80);
+  66   2                      delay(10);
+  67   2                      for(i=0;i<12;i++)
+  68   2                      {
+  69   3                              LCD_Write_Data(table[i]);
+  70   3                              delay(10);
+  71   3                      }
+  72   2                      LCD_Write_Com(0xc0);
+  73   2                      delay(10);
+  74   2                      for(i=0;i<13;i++)
+  75   2                      {
+  76   3                              LCD_Write_Data(table1[i]);
+  77   3                              delay(10);
+  78   3                      }
+  79   2                      /*for(i=0;i<16;i++) //循环左移显示，此时不需要加下面的while(1)语句
+  80   2                      {
+  81   2                              LCD_Write_Com(0x18);
+  82   2                              delay(300);
+  83   2                      }*/
+  84   2                      while(1);//保持显示稳定，不要改语句后，程序从头开始执行会间断的显示
+  85   2              }
+  86   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    198    ----
+   CONSTANT SIZE    =     27    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
