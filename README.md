@@ -6,3 +6,8 @@ For new folders uploaded, plz add description in this README file.
 ## BMP280
 Gas pressure & temperature unit.
 
+## 1602A 5V
+Digital display
+
+
+
